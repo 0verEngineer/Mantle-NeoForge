@@ -1,36 +1,38 @@
-![Mantle logo](https://raw.github.com/SlimeKnights/Mantle/master/src/main/resources/Mantle.png)  
-# Mantle  
-**Shared code for NeoForge mods**
+![Mantle logo](src/main/resources/Mantle.png)
 
-## Compile from Source
-The workspace targets Minecraft 1.21.1, NeoForge, and Java 21.
-* setup: Import the repository as a Gradle project into your IDE.
-* build: Run `./gradlew build` from the repository root.
-* data generation: Run `./gradlew runData`.
+# Mantle
 
-## Issue reporting  
-Please include the following:
+![MIT](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat)
 
-* Minecraft version
-* Mantle version
-* Versions of Mantle dependant mods
-* NeoForge version/build
-* Java version
-* Versions of any mods potentially related to the issue 
-* Any relevant screenshots are greatly appreciated.
-* For crashes:
-	* Steps to reproduce
-	* ForgeModLoader-client-0.log (the FML log) from the root folder of the client
+Unofficial NeoForge 1.21.1 port of [Mantle](https://github.com/SlimeKnights/Mantle),
+originally by [Slime Knights](https://github.com/SlimeKnights).
 
-## Licenses  
-The MIT License (MIT)
-Copyright (c) 2013-2022 Slime Knights (mDiyo, fuj1n, Sunstrike, progwml6, pillbox, alexbegt, KnightMiner)
+Mantle is the shared library required by
+[Tinkers' Construct](https://github.com/Maf1sher/TinkersConstruct-NeoForge) and
+the add-ons built on it. Place it in the `mods` folder alongside them; it
+provides data loading and serialization, registration helpers, recipe builders,
+fluid and loot utilities, and shared client and guidebook code.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+## Building
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+Requires JDK 21. Build from the repository root.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Linux / macOS:
 
+```bash
+./gradlew build
+```
 
-Any alternate licenses are noted where appropriate.
+Windows (Command Prompt or PowerShell):
+
+```bat
+gradlew.bat build
+```
+
+The jar is written to `build/libs/Mantle-1.21.1-*.jar`.
+
+## Credits
+
+- Original mod and author: [Slime Knights](https://github.com/SlimeKnights/Mantle)
+- NeoForge 1.21.1 port: [Maf1sher/Mantle-NeoForge](https://github.com/Maf1sher/Mantle-NeoForge)
+- License: MIT (see [LICENSE](LICENSE))
