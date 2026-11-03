@@ -17,6 +17,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
@@ -84,8 +86,7 @@ public class EntityIngredientRenderer implements IIngredientRenderer<EntityIngre
         }
         // catch exceptions drawing the entity to be safe, any caught exceptions blacklist the entity
         try {
-          // TODO: validate parameters using the ingredient list view
-          InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX, posY, posX + size, posY + size, scale, 0.0625F, 0, 10, livingEntity);
+          renderEntity(graphics, posX, posY, scale, livingEntity);
           return;
         } catch (Exception e) {
           Mantle.logger.error("Error drawing entity " + BuiltInRegistries.ENTITY_TYPE.getKey(type), e);
@@ -104,6 +105,38 @@ public class EntityIngredientRenderer implements IIngredientRenderer<EntityIngre
     RenderSystem.setShaderColor(1, 1, 1, 1);
     int offset = (size - 16) / 2;
     graphics.blit(MISSING, offset, offset, 0, 0, 16, 16, 16, 16);
+  }
+
+  /**
+   * Renders the entity centered in the slot without the scissor used by {@link InventoryScreen#renderEntityInInventoryFollowsAngle}.
+   * That helper assumes absolute coordinates, while JEI positions ingredients through the current pose.
+   */
+  private void renderEntity(GuiGraphics graphics, int posX, int posY, int scale, LivingEntity entity) {
+    // angles are computed from slot-local coordinates; absolute positions would saturate atan and turn the entity sideways
+    float angleX = (float)Math.atan((size / 2.0F) / 40.0F);
+    float angleY = (float)Math.atan((size / 2.0F - 10.0F) / 40.0F);
+    // mirrors the vanilla angle math, just without the scissor
+    Quaternionf pose = new Quaternionf().rotateZ((float)Math.PI);
+    Quaternionf camera = new Quaternionf().rotateX(angleY * 20.0F * (float)(Math.PI / 180.0));
+    pose.mul(camera);
+    float bodyRot = entity.yBodyRot;
+    float yRot = entity.getYRot();
+    float xRot = entity.getXRot();
+    float headRotO = entity.yHeadRotO;
+    float headRot = entity.yHeadRot;
+    entity.yBodyRot = 180.0F + angleX * 20.0F;
+    entity.setYRot(180.0F + angleX * 40.0F);
+    entity.setXRot(-angleY * 20.0F);
+    entity.yHeadRot = entity.getYRot();
+    entity.yHeadRotO = entity.getYRot();
+    float entityScale = entity.getScale();
+    Vector3f translate = new Vector3f(0.0F, entity.getBbHeight() / 2.0F + 0.0625F * entityScale, 0.0F);
+    InventoryScreen.renderEntityInInventory(graphics, posX + size / 2.0F, posY + size / 2.0F, scale / entityScale, translate, pose, camera, entity);
+    entity.yBodyRot = bodyRot;
+    entity.setYRot(yRot);
+    entity.setXRot(xRot);
+    entity.yHeadRotO = headRotO;
+    entity.yHeadRot = headRot;
   }
 
   @SuppressWarnings("removal")

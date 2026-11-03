@@ -77,9 +77,8 @@ public class IngredientHelper {
   }
 
   /** Creates a holder set from the given tag */
-  @SuppressWarnings("deprecation")
   public static <T> HolderSet<T> tagSet(Registry<T> registry, TagKey<T> tag) {
-    return HolderSet.emptyNamed(registry.holderOwner(), tag);
+    return registry.getOrCreateTag(tag);
   }
 
   /** Creates a holder set from the given item tag */
