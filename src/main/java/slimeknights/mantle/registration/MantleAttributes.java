@@ -80,7 +80,9 @@ public class MantleAttributes {
   /** Called when a block is broken to boost its XP using {@link #EXPERIENCE_MULTIPLIER}. */
   @SubscribeEvent
   static void blockDrops(BlockDropsEvent event) {
-    if (event.getBreaker() instanceof LivingEntity living) {
+    // the breaker is any living entity, e.g. a farmer villager harvesting crops, but the attribute
+    // is only registered on players; guard on the attribute being present rather than assuming
+    if (event.getBreaker() instanceof LivingEntity living && living.getAttributes().hasAttribute(EXPERIENCE_MULTIPLIER)) {
       event.setDroppedExperience((int) Math.round(event.getDroppedExperience() * living.getAttributeValue(EXPERIENCE_MULTIPLIER)));
     }
   }
